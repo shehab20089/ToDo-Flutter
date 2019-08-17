@@ -83,86 +83,25 @@ class MyHomePage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          ButtonTheme(
-                            minWidth: 20,
-                            child: FlatButton(
-                              padding: EdgeInsets.all(0),
-                              child: Container(
-                                  width: 34,
-                                  height: 34,
-                                  decoration: BoxDecoration(
-                                      color: Color.fromRGBO(244, 67, 54, 1),
-                                      shape: BoxShape.circle)),
-                              onPressed: () {},
-                            ),
+                          ColorItem(
+                            r: 244,
+                            g: 64,
+                            b: 54,
                           ),
-                          ButtonTheme(
-                            minWidth: 20,
-                            child: FlatButton(
-                              padding: EdgeInsets.all(0),
-                              child: Container(
-                                  width: 34,
-                                  height: 34,
-                                  decoration: BoxDecoration(
-                                      color: Color.fromRGBO(255, 196, 0, 1),
-                                      shape: BoxShape.circle)),
-                              onPressed: () {},
-                            ),
+                          ColorItem(
+                            r: 255,
+                            b: 0,
+                            g: 196,
                           ),
-                          ButtonTheme(
-                            minWidth: 20,
-                            child: FlatButton(
-                              padding: EdgeInsets.all(0),
-                              child: Container(
-                                  width: 34,
-                                  height: 34,
-                                  decoration: BoxDecoration(
-                                      color: Color.fromRGBO(41, 98, 255, 1),
-                                      shape: BoxShape.circle)),
-                              onPressed: () {},
-                            ),
+                          ColorItem(
+                            r: 41,
+                            b: 255,
+                            g: 98,
                           ),
-                          ButtonTheme(
-                            minWidth: 20,
-                            child: FlatButton(
-                              padding: EdgeInsets.all(0),
-                              child: Container(
-                                  width: 34,
-                                  height: 34,
-                                  decoration: BoxDecoration(
-                                      color: Color.fromRGBO(49, 27, 146, 1),
-                                      shape: BoxShape.circle)),
-                              onPressed: () {},
-                            ),
-                          ),
-                          ButtonTheme(
-                            minWidth: 20,
-                            child: FlatButton(
-                              padding: EdgeInsets.all(0),
-                              child: Container(
-                                  width: 34,
-                                  height: 34,
-                                  decoration: BoxDecoration(
-                                      color: Color.fromRGBO(0, 230, 118, 1),
-                                      shape: BoxShape.circle)),
-                              onPressed: () {},
-                            ),
-                          ),
-                          ButtonTheme(
-                            minWidth: 20,
-                            child: FlatButton(
-                              padding: EdgeInsets.all(0),
-                              child: Container(
-                                  width: 34,
-                                  height: 34,
-                                  decoration: BoxDecoration(
-                                      color: Color.fromRGBO(21, 21, 21, 1),
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          width: 0.5, color: Colors.white))),
-                              onPressed: () {},
-                            ),
-                          ),
+                          ColorItem(r: 49, g: 27, b: 146),
+                          ColorItem(r: 0, g: 230, b: 118),
+                          ColorItem(
+                              r: 21, b: 21, g: 21, border: BorderStyle.solid)
                         ],
                       ),
                     ),
@@ -171,6 +110,38 @@ class MyHomePage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ColorItem extends StatelessWidget {
+  final int r, g, b;
+  final BorderStyle border;
+  const ColorItem(
+      {Key key,
+      @required this.r,
+      @required this.b,
+      @required this.g,
+      this.border = BorderStyle.none})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ButtonTheme(
+          minWidth: 20,
+          child: FlatButton(
+            padding: EdgeInsets.all(0),
+            child: Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                    color: Color.fromRGBO(r, g, b, 1),
+                    shape: BoxShape.circle,
+                    border:
+                        Border.all(style: this.border, color: Colors.white))),
+            onPressed: () {},
+          )),
     );
   }
 }
