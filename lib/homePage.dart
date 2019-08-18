@@ -8,8 +8,6 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appstate = Provider.of<AppThemeState>(context);
-
     return Container(
       child: Scaffold(
         backgroundColor: Colors.black,
