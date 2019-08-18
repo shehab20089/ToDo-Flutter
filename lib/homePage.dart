@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:todo/todoListPage.dart';
+import 'applicationThemeState.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final appstate = Provider.of<AppThemeState>(context);
+
     return Container(
       child: Scaffold(
-        backgroundColor: Color.fromRGBO(21, 21, 21, 1),
+        backgroundColor: Colors.black,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -115,6 +120,7 @@ class ColorItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context2) {
+    final appstate = Provider.of<AppThemeState>(context2);
     return Container(
       child: ButtonTheme(
           minWidth: 20,
@@ -129,42 +135,13 @@ class ColorItem extends StatelessWidget {
                     border:
                         Border.all(style: this.border, color: Colors.white))),
             onPressed: () {
+              appstate.setColor(Color.fromRGBO(r, g, b, 1));
               Navigator.push(
                 context2,
-                MaterialPageRoute(
-                    builder: (context) => SecondRoute(
-                          color: new Color.fromRGBO(r, g, b, 1),
-                        )),
+                MaterialPageRoute(builder: (context) => TodoListPage()),
               );
             },
           )),
-    );
-  }
-}
-
-class SecondRoute extends StatelessWidget {
-  final Color color;
-  const SecondRoute({this.color}) : super();
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'My Tasks',
-          style: TextStyle(fontSize: 20),
-        ),
-        // title: Text("Second Route"),
-        backgroundColor: this.color,
-      ),
-      backgroundColor: this.color,
-      body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            // Navigate back to first route when tapped.
-          },
-          child: Text('Go back!'),
-        ),
-      ),
     );
   }
 }
