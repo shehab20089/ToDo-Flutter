@@ -1,10 +1,34 @@
-import 'package:flutter/material.dart';
+enum Days { monday, tuesday, wensday, thursday, friday, saturday, sunday }
 
-enum Days { saturday, sunday, monday, tuesday, wensday, friday }
+class DateDay {
+  static String dateToString(Days days) {
+    switch (days) {
+      case Days.monday:
+        return "Monday";
+      case Days.tuesday:
+        return "Tuesday";
+      case Days.wensday:
+        return "Wensday";
+      case Days.thursday:
+        return "Thursday";
+      case Days.friday:
+        return "Friday";
+      case Days.saturday:
+        return "Saturday";
+      default:
+        return "Sunday";
+    }
+  }
+}
 
 class TodoItem {
-  final String name;
-  final String descripton;
-  final Days days;
-  const TodoItem({this.name, this.descripton, this.days});
+  String name;
+  String descripton;
+  int id;
+  Days days;
+  TodoItem({this.name, this.descripton, this.days, this.id});
+  @override
+  String toString() {
+    return 'the todo title is $name and it\'s description is $descripton in the day ${DateDay.dateToString(days)}';
+  }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:todo/todoListPage.dart';
-import 'applicationThemeState.dart';
+
 import 'package:provider/provider.dart';
+import 'model/TodoItem.dart';
+import 'AppState/applicationThemeState.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key key}) : super(key: key);
@@ -28,7 +30,7 @@ class MyHomePage extends StatelessWidget {
                       style: TextStyle(fontSize: 23, color: Colors.white),
                     ),
                     Text(
-                      'My Tasks',
+                      'My Tasks${DateDay.dateToString(Days.values[DateTime.now().weekday - 1])}',
                       style: TextStyle(fontSize: 50, color: Colors.white),
                     ),
                     Text(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'AddItemPage.dart';
 import 'AppState/applicationThemeState.dart';
 
 class TodoListPage extends StatefulWidget {
@@ -41,9 +42,18 @@ class _TodoListPageState extends State<TodoListPage> {
               index: index,
             );
           } else
-            return ListItem(
-              color: appstate.color,
-              textC: Colors.white,
+            return FlatButton(
+              padding: EdgeInsets.all(0),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddPage()),
+                );
+              },
+              child: ListItem(
+                color: appstate.color,
+                textC: Colors.white,
+              ),
             );
         }),
       ),
