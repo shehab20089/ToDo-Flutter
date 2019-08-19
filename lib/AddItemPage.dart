@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:todo/SelectDayPage.dart';
 import 'package:todo/todoListPage.dart';
 import 'package:provider/provider.dart';
+import 'AppState/applicationItemState.dart';
 import 'model/TodoItem.dart';
 import 'AppState/applicationThemeState.dart';
 
@@ -20,6 +22,7 @@ class _AddPageState extends State<AddPage> {
   @override
   Widget build(BuildContext context) {
     final appThemeState = Provider.of<AppThemeState>(context);
+    final appItemstate = Provider.of<AppItemState>(context);
 
     return Container(
       child: Scaffold(
@@ -137,6 +140,16 @@ class _AddPageState extends State<AddPage> {
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
                         print(newItem.toString());
+                        if (newItem.days != null) {
+                          appItemstate.add(newItem);
+                          Navigator.pop(context);
+                        } else {
+                          Alert(
+                                  title: 'Alert',
+                                  desc: 'Please pick a day first',
+                                  context: context)
+                              .show();
+                        }
                         //TODO:the logic of implementing the add item
                       }
                     },
