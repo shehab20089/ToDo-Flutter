@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'AddItemPage.dart';
 import 'AppState/applicationItemState.dart';
 import 'AppState/applicationThemeState.dart';
+import 'EditItemPage.dart';
 import 'model/TodoItem.dart';
 
 class TodoListPage extends StatefulWidget {
@@ -112,7 +114,14 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () {},
+      onLongPress: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditPage(),
+          ),
+        );
+      },
       child: Card(
         elevation: 10,
         color: this.color,

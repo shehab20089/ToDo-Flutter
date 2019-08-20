@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/AppState/applicationItemState.dart';
 import 'AppState/applicationThemeState.dart';
-
 import 'homePage.dart';
 import 'package:provider/provider.dart';
 

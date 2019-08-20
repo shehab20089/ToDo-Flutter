@@ -25,8 +25,9 @@ class TodoItem {
   String name;
   String descripton;
   int id;
+  String qRcode;
   Days days;
-  TodoItem({this.name, this.descripton, this.days, this.id});
+  TodoItem({this.name, this.descripton, this.days, this.id,this.qRcode});
   @override
   String toString() {
     return 'the todo title is $name and it\'s description is $descripton in the day ${DateDay.dateToString(days)}';

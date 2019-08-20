@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:todo/SelectDayPage.dart';
-import 'package:todo/qrCodePage.dart';
-import 'package:todo/todoListPage.dart';
 import 'package:provider/provider.dart';
 import 'AppState/applicationItemState.dart';
 import 'model/TodoItem.dart';
 import 'AppState/applicationThemeState.dart';
 
-class AddPage extends StatefulWidget {
-  const AddPage({Key key}) : super(key: key);
+class EditPage extends StatefulWidget {
+  const EditPage({Key key}) : super(key: key);
 
   @override
-  _AddPageState createState() => _AddPageState();
+  _EditPageState createState() => _EditPageState();
 }
 
-class _AddPageState extends State<AddPage> {
+class _EditPageState extends State<EditPage> {
   final _formKey = GlobalKey<FormState>();
   var result = 'select day';
-  var qrCode = 'Tab to scan the QR code ';
   var newItem = TodoItem();
 
   @override
@@ -30,7 +27,7 @@ class _AddPageState extends State<AddPage> {
       child: Scaffold(
         backgroundColor: appThemeState.color,
         appBar: AppBar(
-          title: Text('Add New'),
+          title: Text('Edit '),
           backgroundColor: appThemeState.color,
         ),
         body: Form(
@@ -41,7 +38,7 @@ class _AddPageState extends State<AddPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Expanded(
-                  flex: 7,
+                  flex: 8,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
@@ -107,31 +104,28 @@ class _AddPageState extends State<AddPage> {
                           style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
-                          onTap: () async {
-                            final Day popresult = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SelectDayPage()),
-                            );
-                            setState(() {
-                              result = popresult.dayName;
-                              print('hello $result best day in the week');
-                            });
-                            newItem.days = popresult.days;
-                          },
-                          child: Container(
-                            height: 70.4,
-                            decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Center(
-                              child: Text(
-                                '$result',
-                                style: TextStyle(fontSize: 20),
-                              ),
+                      GestureDetector(
+                        onTap: () async {
+                          final Day popresult = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SelectDayPage()),
+                          );
+                          setState(() {
+                            result = popresult.dayName;
+                            print('hello $result best day in the week');
+                          });
+                          newItem.days = popresult.days;
+                        },
+                        child: Container(
+                          height: 70.4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Center(
+                            child: Text(
+                              '$result',
+                              style: TextStyle(fontSize: 20),
                             ),
                           ),
                         ),
@@ -140,58 +134,15 @@ class _AddPageState extends State<AddPage> {
                   ),
                 ),
                 Expanded(
-                  flex: 1,
-                  child: GestureDetector(
-                    onTap: () async {
-                      final String value = await Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => QRcode()));
-                      setState(() {
-                        qrCode = value;
-                        newItem.qRcode = qrCode;
-                      });
-                    },
-                    child: Container(
-                      // color: Colors.yellow,
-                      child: ListTile(
-                        trailing: Image.asset(
-                          'lib/images/icons8-ios-50.png',
-                          height: 40,
-                          width: 40,
-                          color: Color.fromRGBO(60, 60, 60, 1),
-                        ),
-                        subtitle: Text(
-                          qrCode,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w100,
-                              color: Color.fromRGBO(255, 255, 255, 0.8)),
-                        ),
-                        title: Text(
-                          'Task Code',
-                          style: TextStyle(fontSize: 15, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
                   child: RaisedButton(
-                    onPressed: () async {
+                    onPressed: () {
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
                         print(newItem.toString());
                         if (newItem.days != null) {
-                          if (newItem.qRcode != null) {
-                            await Navigator.pop(context);
-                            newItem.qRcode = qrCode;
-                            newItem.id = appItemstate.items.length;
-                            appItemstate.add(newItem);
-                          } else {
-                            Alert(
-                                    title: 'Alert',
-                                    desc: 'Please scan a qr code  first',
-                                    context: context)
-                                .show();
-                          }
+                          newItem.id = appItemstate.items.length;
+                          appItemstate.add(newItem);
+                          Navigator.pop(context);
                         } else {
                           Alert(
                                   title: 'Alert',
@@ -199,7 +150,6 @@ class _AddPageState extends State<AddPage> {
                                   context: context)
                               .show();
                         }
-
                         //TODO:the logic of implementing the add item
                       }
                     },
