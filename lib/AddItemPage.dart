@@ -146,8 +146,10 @@ class _AddPageState extends State<AddPage> {
                       final String value = await Navigator.push(context,
                           MaterialPageRoute(builder: (context) => QRcode()));
                       setState(() {
-                        qrCode = value;
-                        newItem.qRcode = qrCode;
+                        if (value != qrCode) {
+                          qrCode = value;
+                          newItem.qRcode = qrCode;
+                        }
                       });
                     },
                     child: Container(

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:todo/SelectDayPage.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/qrCodePage.dart';
 import 'AppState/applicationItemState.dart';
 import 'model/TodoItem.dart';
 import 'AppState/applicationThemeState.dart';
 
 class EditPage extends StatefulWidget {
-  const EditPage({Key key}) : super(key: key);
+  final TodoItem todo;
+
+  const EditPage({Key key, @required this.todo}) : super(key: key);
 
   @override
   _EditPageState createState() => _EditPageState();
@@ -15,14 +17,19 @@ class EditPage extends StatefulWidget {
 
 class _EditPageState extends State<EditPage> {
   final _formKey = GlobalKey<FormState>();
-  var result = 'select day';
-  var newItem = TodoItem();
+  var result = 'asdasd';
+  var qrCode = 'Tab to scan the QR code ';
+  // var newItem = TodoItem();
+  _EditPageState() {
+    //
+  }
 
   @override
   Widget build(BuildContext context) {
     final appThemeState = Provider.of<AppThemeState>(context);
     final appItemstate = Provider.of<AppItemState>(context);
-
+    result = DateDay.dateToString(widget.todo.days);
+    qrCode = widget.todo.qRcode;
     return Container(
       child: Scaffold(
         backgroundColor: appThemeState.color,
@@ -38,7 +45,7 @@ class _EditPageState extends State<EditPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Expanded(
-                  flex: 8,
+                  flex: 7,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
@@ -53,9 +60,10 @@ class _EditPageState extends State<EditPage> {
                         ),
                       ),
                       TextFormField(
+                        initialValue: widget.todo.name,
                         maxLines: 2,
                         onSaved: (value) {
-                          newItem.name = value;
+                          widget.todo.name = value;
                         },
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -80,8 +88,9 @@ class _EditPageState extends State<EditPage> {
                       ),
                       TextFormField(
                         maxLines: 3,
+                        initialValue: widget.todo.descripton,
                         onSaved: (value) {
-                          newItem.descripton = value;
+                          widget.todo.descripton = value;
                         },
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -115,7 +124,7 @@ class _EditPageState extends State<EditPage> {
                             result = popresult.dayName;
                             print('hello $result best day in the week');
                           });
-                          newItem.days = popresult.days;
+                          widget.todo.days = popresult.days;
                         },
                         child: Container(
                           height: 70.4,
@@ -134,22 +143,51 @@ class _EditPageState extends State<EditPage> {
                   ),
                 ),
                 Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () async {
+                      final String value = await Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => QRcode()));
+                      setState(() {
+                        if (value != null) {
+                          qrCode = value;
+                          widget.todo.qRcode = qrCode;
+                        }
+                      });
+                    },
+                    child: Container(
+                      // color: Colors.yellow,
+                      child: ListTile(
+                        trailing: Image.asset(
+                          'lib/images/icons8-ios-50.png',
+                          height: 40,
+                          width: 40,
+                          color: Color.fromRGBO(60, 60, 60, 1),
+                        ),
+                        subtitle: Text(
+                          qrCode,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w100,
+                              color: Color.fromRGBO(255, 255, 255, 0.8)),
+                        ),
+                        title: Text(
+                          'Task Code',
+                          style: TextStyle(fontSize: 15, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
                   child: RaisedButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
-                        print(newItem.toString());
-                        if (newItem.days != null) {
-                          newItem.id = appItemstate.items.length;
-                          appItemstate.add(newItem);
-                          Navigator.pop(context);
-                        } else {
-                          Alert(
-                                  title: 'Alert',
-                                  desc: 'Please pick a day first',
-                                  context: context)
-                              .show();
-                        }
+                        print(widget.todo.toString());
+
+                        appItemstate.edit(widget.todo);
+                        Navigator.pop(context);
+
                         //TODO:the logic of implementing the add item
                       }
                     },

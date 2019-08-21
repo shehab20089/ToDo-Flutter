@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/donePage.dart';
 
 import 'AddItemPage.dart';
 import 'AppState/applicationItemState.dart';
@@ -66,39 +67,113 @@ class _TodoListPageState extends State<TodoListPage> {
         backgroundColor: appstate.color,
       ),
       backgroundColor: appstate.color,
-      body: GridView.count(
-        // Create a grid with 2 columns. If you change the scrollDirection to
-        // horizontal, this produces 2 rows.
-        crossAxisCount: rowCount,
-        mainAxisSpacing: 20,
-        childAspectRatio: itemsize,
-        crossAxisSpacing: 10,
-        padding: EdgeInsets.all(20),
-        // Generate 100 widgets that display their index in the List.
-        children: List.generate(appItemstate.items.length + 1, (index) {
-          print(index);
-          if (index != appItemstate.items.length + 1 - 1) {
-            print('here');
-            return ListItem(
-              color: Colors.grey,
-              text: appItemstate.items[index].name,
-            );
-          } else
-            return FlatButton(
-              padding: EdgeInsets.all(0),
-              onPressed: () {
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Expanded(
+            flex: 8,
+            child: GridView.count(
+              // Create a grid with 2 columns. If you change the scrollDirection to
+              // horizontal, this produces 2 rows.
+              crossAxisCount: rowCount,
+              mainAxisSpacing: 20,
+              childAspectRatio: itemsize,
+              crossAxisSpacing: 10,
+              padding: EdgeInsets.all(20),
+              // Generate 100 widgets that display their index in the List.
+              children: List.generate(appItemstate.items.length + 1, (index) {
+                print(index);
+                if (index != appItemstate.items.length + 1 - 1) {
+                  return Dismissible(
+                    onDismissed: (d) {
+                      if (d == DismissDirection.startToEnd)
+                        appItemstate.remove(appItemstate.items[index]);
+                      else
+                        appItemstate.addDone(appItemstate.items[index]);
+                    },
+                    background: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.red,
+                      ),
+                      child: Icon(
+                        Icons.delete,
+                        size: 50,
+                        textDirection: TextDirection.rtl,
+                      ),
+                    ),
+                    secondaryBackground: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.green,
+                      ),
+                      child: Icon(Icons.done),
+                    ),
+                    key: new Key(appItemstate.items[index].id.toString()),
+                    child: GestureDetector(
+                      onLongPress: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                EditPage(todo: appItemstate.items[index]),
+                          ),
+                        );
+                      },
+                      child: ListItem(
+                        color: Colors.grey,
+                        text: appItemstate.items[index].name,
+                      ),
+                    ),
+                  );
+                } else
+                  return FlatButton(
+                    padding: EdgeInsets.all(0),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AddPage()),
+                      );
+                    },
+                    child: ListItem(
+                      text: "Add New +",
+                      color: appstate.color,
+                      textC: Colors.white,
+                    ),
+                  );
+              }),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: GestureDetector(
+              onVerticalDragDown: (tab) {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AddPage()),
-                );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DonePage(
+                              rowCount: rowCount,
+                              itemsize: itemsize,
+                            )));
               },
-              child: ListItem(
-                text: "Add New +",
-                color: appstate.color,
-                textC: Colors.white,
+              child: Container(
+                child: Column(
+                  children: <Widget>[
+                    Icon(
+                      Icons.keyboard_arrow_up,
+                      size: 20,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      'Done ',
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    )
+                  ],
+                ),
               ),
-            );
-        }),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -113,26 +188,16 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => EditPage(),
-          ),
-        );
-      },
-      child: Card(
-        elevation: 10,
-        color: this.color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Center(
-          child: Text(
-            '$text ',
-            style: TextStyle(color: textC, fontSize: 23),
-          ),
+    return Card(
+      elevation: 10,
+      color: this.color,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: Center(
+        child: Text(
+          '$text ',
+          style: TextStyle(color: textC, fontSize: 23),
         ),
       ),
     );
